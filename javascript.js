@@ -3,7 +3,7 @@ $(function () {
     console.log("Page Loaded");
 })
 
-var searchArray = ["Fish", "Turle", "Lemur"];
+var searchArray = ["Fish", "Axolotl", "Beluga Whale"];
 
 function populateButtons(searchArray, classToAdd, areaToAddTo) {
     $(areaToAddTo).empty();
@@ -19,15 +19,14 @@ function populateButtons(searchArray, classToAdd, areaToAddTo) {
 $(document).on("click", ".searchButton", function () {
     $("#searches").empty();
     var type = $(this).data("type");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + type + "&api_key=8dyyCPoEKORvYTpYdQMQ0CVwE0DIip6L";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + type + "&api_key=8dyyCPoEKORvYTpYdQMQ0CVwE0DIip6L&limit=10";
 
     $.ajax({
         url: queryURL,
         method: "GET"
-    }).then(function (response) {
-        console.log(response);
+    }).done(function (response) {
         for (var i = 0; i < response.data.length; i++) {
-            var searchDiv = $("<div class='search-item'>");
+            var searchDiv = $('<div class="search-item">');
             var rating = response.data[i].rating;
             var p = $("<p>").text('Rating:' + rating);
             var animated = response.data[i].images.fixed_height.url;
@@ -36,7 +35,7 @@ $(document).on("click", ".searchButton", function () {
             image.attr('src', still);
             image.attr('data-still', still);
             image.attr('data-animated', animated);
-            image.attr('data-state', still);
+            image.attr('data-state', 'still');
             image.addClass('searchImage');
             searchDiv.append(p);
             searchDiv.append(image);
@@ -49,14 +48,14 @@ $(document).on("click", ".searchButton", function () {
 
 })
 
-$(document).on('click','.searchImage',function(){
+$(document).on('click', '.searchImage', function () {
     var state = $(this).attr('data-state');
     if (state == 'still') {
-        $(this).attr('src',$(this).data('animated'));
-        $(this).attr('data-state','animated');
-    }else{
-        $(this).attr('src',$(this).data('still'));
-        $(this).attr('data-state','still');
+        $(this).attr('src', $(this).data('animated'));
+        $(this).attr('data-state', 'animated');
+    } else {
+        $(this).attr('src', $(this).data('still'));
+        $(this).attr('data-state', 'still');
     }
 })
 
@@ -66,7 +65,7 @@ $(document).on('click','.searchImage',function(){
 $('#addSearch').on('click',function(){
     var newSearch = $('input').eq(0).val();
     searchArray.push(newSearch);
-    populateButtons(searchArray, "searchButton", "#buttonsArea");
+    populateButtons(searchArray, 'searchButton', '#buttonsArea');
     return false;
 })
 
